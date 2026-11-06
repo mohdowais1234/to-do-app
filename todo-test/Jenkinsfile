@@ -1,33 +1,21 @@
 pipeline {
     agent any
-    
     stages {
-        stage('1. Clone Code') {
+        stage('Clone') {
             steps {
-                echo 'Code clone ho gaya...'
+                echo 'Cloning...'
             }
         }
-        stage('2. Build - Django Setup') {
+        stage('Build') {
             steps {
-                bat 'pip install django'
+                bat 'pip install -r requirements.txt'
             }
         }
-        stage('3. Test') {
+        stage('Test') {
             steps {
-                bat 'python manage.py test || echo Tests completed'
-            }
-        }
-        stage('4. Docker Build - CD Start') {
-            steps {
-                bat 'docker build -t todo-app:latest .'
-            }
-        }
-        stage('5. Deploy - Run App') {
-            steps {
-                bat 'docker stop todo-container || exit 0'
-                bat 'docker rm todo-container || exit 0'
-                bat 'docker run -d --name todo-container -p 8000:8000 todo-app:latest'
+                bat 'python manage.py test'
             }
         }
     }
-}      
+}
+        
